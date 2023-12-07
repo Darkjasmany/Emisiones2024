@@ -1,0 +1,55 @@
+
+
+--CARTAS LIQUIDACION ACTIVA PARA EL AÑO A CONSULTAR
+
+select * from liquidacion_avaluo_rural where estado=1 and ano=2017;
+select * from factura where id in (select id_factura from liquidacion_avaluo_rural where estado=1 and ano=2017);
+select * from factura_detalle where id_factura in (select id_factura from liquidacion_avaluo_rural where estado=1 and ano=2017);
+
+
+--MONTOS DE RURAL
+SELECT count(fd.*) "nroTitulos", r.descripcion, SUM(fd."valorUnitario")
+FROM factura f, factura_detalle fd, rubro r,liquidacion_avaluo_rural lar
+WHERE f.id=fd.id_factura 
+AND fd.id_rubro=r.id
+and lar.id_factura=f.id
+and lar.estado=1
+AND f.id_modulo=2
+and lar.ano = 2018
+GROUP BY r.descripcion;
+
+--MONTOS DE URBANO
+SELECT count(fd.*) "nroTitulos", r.descripcion, SUM(fd."valorUnitario")
+FROM factura f, factura_detalle fd, rubro r,liquidacion_avaluo lar
+WHERE f.id=fd.id_factura 
+AND fd.id_rubro=r.id
+and lar.id_factura=f.id
+and lar.estado=1
+AND f.id_modulo=1
+and lar.ano = 2018
+and fd.estado = 1
+GROUP BY r.descripcion;
+
+--MONTOS DE PATENTES
+SELECT count(fd.*) "nroTitulos", r.descripcion, SUM(fd."valorUnitario")
+FROM factura f, factura_detalle fd, rubro r,patente_liquidacion lar
+WHERE f.id=fd.id_factura 
+AND fd.id_rubro=r.id
+and lar.id_factura=f.id
+and lar.estado=1
+--AND f.id_modulo=1
+and lar.ano = 2018
+and fd.estado = 1
+GROUP BY r.descripcion;
+
+--VER LAS PATENTES EMITIDAS Y NO EMITIDAS POR AÑO
+select *  from patente where "id" not in (select DISTINCT id_patente  from patente_liquidacion where ano = 2017 and estado = 1) and estado = 1  ;
+select *  from patente where "id"  in (select DISTINCT id_patente  from patente_liquidacion where ano = 2017 and estado = 1) and estado = 1  ORDER BY "id" ;
+
+
+--CARTAS SIMULADAS
+select * from liquidacion_avaluo_rural where estado=2 and ano=2016;
+select * from factura where id in (select id_factura from liquidacion_avaluo_rural where estado=2 and ano=2016);
+select * from factura_detalle where id_factura in (select id_factura from liquidacion_avaluo_rural where estado=2 and ano=2016);
+
+

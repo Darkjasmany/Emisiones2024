@@ -1,0 +1,17 @@
+PVE4
+USUARIO: root
+CLAVE: y#4BJN7P5t6{u5r
+
+https://192.168.0.252:8006/#v1:0:18:4:::::::
+usuario: root
+Clave: S1st3m@$GAD#19
+
+
+SERVIDOR DE BASE DE DATOS
+ssh: 192.158.0.221 puerto:22
+USUARIO: root
+clave: gadCatrastro#2000
+
+usuario base: postgres
+contraseña:lajnaran#siim
+base: siim_10052021

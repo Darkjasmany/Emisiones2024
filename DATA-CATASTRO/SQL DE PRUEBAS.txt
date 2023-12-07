@@ -1,0 +1,17 @@
+SELECT	"count" ("id")FROM	predio WHERE	estado = 1;
+select * from liquidacion_avaluo where ano = 2025 and estado = 1;
+select * from predio where "id" not in (select id_predio from liquidacion_avaluo where ano = 2025 and estado = 1) and estado = 1;
+select id_cliente, "count"("id") from predio where "id" not in (select id_predio from liquidacion_avaluo where ano = 2025 and estado = 1) and estado = 1 GROUP BY id_cliente;
+
+
+
+--select id_vigas, "count"(id_predio) from construccion GROUP BY id_vigas ORDER BY id_vigas;
+--select id_tipo_sanitarias, "count"(id_predio) from construccion GROUP BY id_tipo_sanitarias ORDER BY id_tipo_sanitarias;
+--select id_columnas, "count"(id_predio) from construccion GROUP BY id_columnas ORDER BY id_columnas;
+select id_entrepisos, "count"(id_predio) from construccion GROUP BY id_entrepisos ORDER BY id_entrepisos;
+
+
+
+
+--select * from tipo_material ORDER BY id;	
+select * from construccion --where id_paredes in (0,1) ;--id_predio = 56750;  

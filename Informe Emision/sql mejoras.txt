@@ -1,0 +1,15 @@
+---consultar predios activos con liiquidacion 2017 excluyendo a los predios municipales (4)
+
+select * from liquidacion_avaluo where id_predio in (select "id" from predio where estado = 1 and id_tipo_personeria_juridica not IN (4))
+and ano = 2017 and estado in (1);
+
+
+---update campo fechaactualizacion '2017-01-05'
+
+update liquidacion_avaluo set "fechaActualizacion" = '2017-01-05' where id_predio in (select "id" from predio where estado = 1 and id_tipo_personeria_juridica not IN (4))
+and ano = 2017 and estado in (1);
+
+
+--ejemplo que nos guiamos
+select * from liquidacion_avaluo where id_predio in (59403,59369,46856) and ano = 2017 ORDER BY id_predio;
+select * from liquidacion_avaluo where id_predio in (46854,46855,46856,46859,46860,59369,59403) and  ano = 2017 and estado = 1 ORDER BY id_predio;

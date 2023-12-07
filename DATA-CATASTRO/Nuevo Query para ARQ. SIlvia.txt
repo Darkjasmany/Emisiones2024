@@ -1,0 +1,60 @@
+select pre."id" "ID_Predio",
+CONCAT(pro.codigo, can.codigo, par.codigo, trim(zon.codigo), trim(sec.codigo), trim(pol.codigo), pre.predio, pre.bloque, pre.piso, pre."propHorizontal") as "Clave Predial(P C P Z S P)",
+c.cedula as "Cedula", (c.apellido || ' ' || c.nombre) as "Contribuyente",
+(select "sum"(fd."valorUnitario"*cantidad )
+from factura f, factura_detalle fd, liquidacion_avaluo lqa 
+where lqa.id_predio = pre."id"
+and lqa.ano = 2017
+and lqa.estado = 1
+and lqa.id_factura = f."id"
+and fd.id_factura = f.id
+) as "TotalEmision2017",
+
+(select "sum"(fd."valorUnitario"*cantidad )
+from factura f, factura_detalle fd, liquidacion_avaluo lqa 
+where lqa.id_predio = pre."id"
+and lqa.ano = 2018
+and lqa.estado = 1
+and lqa.id_factura = f."id"
+and fd.id_factura = f.id
+) as "TotalEmision2018",
+
+(select "sum"(fd."valorUnitario"*cantidad )
+from factura f, factura_detalle fd, liquidacion_avaluo lqa 
+where lqa.id_predio = pre."id"
+and lqa.ano = 2019
+and lqa.estado = 1
+and lqa.id_factura = f."id"
+and fd.id_factura = f.id
+) as "TotalEmision2019",
+
+(select "sum"(fd."valorUnitario"*cantidad )
+from factura f, factura_detalle fd, liquidacion_avaluo lqa 
+where lqa.id_predio = pre."id"
+and lqa.ano = 2020
+and lqa.estado = 1
+and lqa.id_factura = f."id"
+and fd.id_factura = f.id
+) as "TotalEmision2020",
+
+(select "sum"(fd."valorUnitario"*cantidad )
+from factura f, factura_detalle fd, liquidacion_avaluo lqa 
+where lqa.id_predio = pre."id"
+and lqa.ano = 2021
+and lqa.estado = 1
+and lqa.id_factura = f."id"
+and fd.id_factura = f.id
+) as "TotalEmision2021"
+
+FROM  predio pre
+INNER JOIN poligono pol ON pol.id=pre.id_poligono
+INNER JOIN sector sec ON sec.id=pol.id_sector
+INNER JOIN zona zon ON zon.id=sec.id_zona
+INNER JOIN parroquia par ON par.id=zon.id_parroquia
+INNER JOIN canton can ON can.id=par.id_canton
+INNER JOIN provincia pro ON pro.id=can.id_provincia
+INNER JOIN cliente c ON c.id=pre.id_cliente
+
+where pre.estado = 1
+
+ORDER BY "Clave Predial(P C P Z S P)"

@@ -1,0 +1,32 @@
+--Identificamos las cartas con ese rubro y el set en cero
+
+select * from factura_detalle 
+where id_factura in (select id_factura from liquidacion_avaluo where ano = 2018 and estado =  1)
+and estado = 1 and id_rubro = 68 --68	bomberos urbano;
+
+--SET 0 ESAS CARTAS
+
+update factura_detalle set estado = 0 
+where id_factura in (select id_factura from liquidacion_avaluo where ano = 2018 and estado =  1)
+and estado = 1 and id_rubro = 68 --68	bomberos urbano;
+
+
+
+******************************************************************
+--Para solventar este problema de forma momentánea, emitir así, luego identificar cuales son de la exoneración agrícola le cambian la referencia del nuevo rubro. 
+
+--Identificamos las patentes agrícolas
+
+select * from factura_detalle where id_factura in (select id_factura from patente_liquidacion where id_patente in 
+(select "id" from patente where id_tipo_patente = 2 and estado = 1 ) 
+and ano = 2018 and estado = 1) and id_rubro = 56; --rubro 56 exoneracion 3era edad en modulo patente
+
+
+update factura_detalle set id_rubro = 1108 where id_factura in (select id_factura from patente_liquidacion where id_patente in 
+(select "id" from patente where id_tipo_patente = 2 and estado = 1 ) 
+and ano = 2018 and estado = 1) and id_rubro = 56; 
+--realizar e update del rubro exoneracion por el de 1108	exoneracion patente agricola
+
+
+
+

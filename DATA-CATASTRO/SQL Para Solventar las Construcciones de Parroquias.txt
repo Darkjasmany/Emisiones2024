@@ -1,0 +1,11 @@
+--CAMBIAR LA CLAVE POR LA PARROQUIA
+
+select * from claveclientevw where clave LIKE '091151%';
+select * from predio where "id" in (select idpredio from claveclientevw where clave LIKE '091151%');
+select * from construccion where id_predio in (select idpredio from claveclientevw where clave LIKE '091151%') ORDER BY id_vigas;
+
+--ACTUALIZAR LOS CAMPOS id_vigas (9), 
+id_columnas (9), 
+id_cubierta (131), 
+id_tumbados (0)
+--REFERENCIADO CON LA TABLA TIPO_MATERIAL que se obtiene los id y asi mismo se ponen los valores

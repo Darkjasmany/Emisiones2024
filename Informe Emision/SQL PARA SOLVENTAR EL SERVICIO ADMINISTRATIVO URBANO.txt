@@ -1,0 +1,28 @@
+--LISTADO DE PREDIOS MUNICIPALES
+select c.clave, c.nombres ,  t.descripcion
+from predio p, claveclientevw c , tipo_personeria_juridica t
+where p.estado = 1 
+and p."id" = c.idpredio
+and p.id_tipo_personeria_juridica IN ( 4)
+and t."id" = p.id_tipo_personeria_juridica
+ORDER BY c.clave;
+
+--IDENTIFICAMOS LAS FACTURAS (TIENEN QUE SER EL MISMO NUMERO DE LOS PREDIOS MUNICIPALES
+select * from factura where estado = 1 and "id" in
+(select id_factura from liquidacion_avaluo where estado = 1 and ano = 2018 and
+id_predio in (select "id" from predio where id_tipo_personeria_juridica in (4) and estado = 1));
+
+
+select *  from factura_detalle where id_factura in (select "id" from factura where estado = 1 and "id" in
+(select id_factura from liquidacion_avaluo where estado = 1 and ano = 2018 and
+id_predio in (select "id" from predio where id_tipo_personeria_juridica in (4) and estado = 1)))  ;
+
+--seleccionamos solo el rubro Servicios Administrativos Urbano 44
+select * from factura_detalle where id_factura in (select "id" from factura where estado = 1 and "id" in
+(select id_factura from liquidacion_avaluo where estado = 1 and ano = 2018 and
+id_predio in (select "id" from predio where id_tipo_personeria_juridica in (4) and estado = 1))) and id_rubro = 44;
+
+--actualizamos el valor en o 
+update factura_detalle set "valorUnitario" = '0 'where id_factura in (select "id" from factura where estado = 1 and "id" in
+(select id_factura from liquidacion_avaluo where estado = 1 and ano = 2018 and
+id_predio in (select "id" from predio where id_tipo_personeria_juridica in (4) and estado = 1))) and id_rubro = 44;

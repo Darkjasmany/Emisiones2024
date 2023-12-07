@@ -1,0 +1,4 @@
+select * from liquidacion_avaluo where id_predio in (select "id" from predio where estado = 1) and estado = 1 and ano = 2024;
+select * from factura where "id" in (select id_factura from liquidacion_avaluo where id_predio in (select "id" from predio where estado = 1) and estado = 1 and ano = 2024);
+select * from factura_detalle where id_factura in (select id_factura from liquidacion_avaluo where id_predio in (select "id" from predio where estado = 1) and estado = 1 and ano = 2024);
+

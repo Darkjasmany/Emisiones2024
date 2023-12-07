@@ -1,0 +1,33 @@
+select  ur."id" "is_predio" ,"sum"(ur.superficie) "superficie", cl.clave, lar."totalAvaluo"
+from uso_rural ur, claveclienteruralvw cl, liquidacion_avaluo_rural lar, predio_rural pr
+where pr.estado = 1
+and ur."id" = pr."id"
+and cl.idpredio = ur.id
+and lar.id_predio_rural = ur."id"
+and lar.ano = 2022 --AÑO DE ULTIMA EMISION
+AND lar.estado = 1
+--and lar."totalAvaluo" = '11734.78'
+GROUP BY ur."id", cl.clave, lar."totalAvaluo", pr.observaciones
+HAVING "sum"(ur.superficie) <=1 
+ORDER BY ur."id";
+
+
+select * from uso_rural where "id" in (
+
+select  ur."id" 
+from uso_rural ur, claveclienteruralvw cl, liquidacion_avaluo_rural lar, predio_rural pr
+where pr.estado = 1
+and ur."id" = pr."id"
+and cl.idpredio = ur.id
+and lar.id_predio_rural = ur."id"
+and lar.ano = 2022 --AÑO DE ULTIMA EMISION
+AND lar.estado = 1
+--and lar."totalAvaluo" = '11734.78'
+GROUP BY ur."id", cl.clave, lar."totalAvaluo", pr.observaciones
+HAVING "sum"(ur.superficie) <=1 
+
+
+) ORDER BY "id" ;
+
+
+select * from claveclienteruralvw where idpredio = 3889

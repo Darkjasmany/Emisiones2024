@@ -1,0 +1,29 @@
+--URBANO
+
+select c.clave, c.nombres , (p.calle || 'entre' ||p.entre )as direccion , 'URBANO' USO_PREDIO, t.descripcion TENENCIA, la."areaTerreno", la."totalAvaluo"
+from predio p, liquidacion_avaluo la, claveclientevw c, tipo_personeria_juridica t
+where p.estado = 1
+and p."id" = c.idpredio
+and p."id" = la.id_predio
+and p.id_tipo_personeria_juridica not IN ( 4) --no estan incluidos los predios Jurídica Pública Municipal
+and t."id" = p.id_tipo_personeria_juridica
+and la.estado = 1
+and la.ano = 2018
+ORDER BY c.clave;
+
+
+--RURAL
+
+select c.clave, c.nombres, p.sector, 'RURAL' USO_PREDIO, t.descripcion TENENCIA, la."areaTerreno", la."totalAvaluo"
+from predio_rural p, liquidacion_avaluo_rural la, claveclienteruralvw c, tipo_personeria_juridica t
+where p.id_poligono in (select "id" from poligono_rural where id_sector in (select "id" from sector_rural where id_zona in (select "id" from zona_rural where id_parroquia in (select "id" from parroquia where codigo = '53' and id_canton = '85')))) --parroquia
+and p.estado = 1
+and p."id" = c.idpredio
+and p."id" = la.id_predio_rural 
+and p.id_tipo_personeria not IN ( 4) --no estan incluidos los predios Jurídica Pública Municipal
+and t."id" = p.id_tipo_personeria
+and la.estado = 1
+and la.ano = 2018
+ORDER BY c.clave;
+
+

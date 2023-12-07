@@ -1,0 +1,17 @@
+--PREDIOS PERSONA JURIDICA 4
+select c.clave, c.nombres ,  t.descripcion
+from predio p, claveclientevw c , tipo_personeria_juridica t
+where p.estado = 1 
+and p."id" = c.idpredio
+and p.id_tipo_personeria_juridica IN ( 4)
+and t."id" = p.id_tipo_personeria_juridica
+ORDER BY c.clave;
+
+--PREDIOS MUNICIPALES
+SELECT  c.clave, c.nombres, t.descripcion
+FROM predio P, claveclientevw c , tipo_personeria_juridica t
+WHERE P.id_cliente = 93620
+AND P.estado = 1
+and c.idpredio = p."id"
+and t."id" = p.id_tipo_personeria_juridica
+ORDER BY c.clave;

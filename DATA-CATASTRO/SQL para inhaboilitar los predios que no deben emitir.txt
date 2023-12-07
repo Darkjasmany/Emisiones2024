@@ -1,0 +1,14 @@
+--SON 8999 PREDIOS QUE NO VAN A EMITIR Y EL DEPARTAMENTO DE CATASTRO VA A PROCEDER ACTUALIZAR MANUALMENTE
+--TENGO QUE HACER EL UPDATE DEL ESTADO DE 1 PASA A 0 ESTE RESULTADO PARA QUE PUEDA EMITIR OK
+
+select * from predio where "id" in (SELECT public.predio.id 
+FROM predio 
+WHERE 
+		 estado = 1	
+
+		and ( public.predio.observaciones like 'Ref: 09115%'	
+		    or public.predio.observaciones like 'Ref: 09115%'	
+			or public.predio."claveAntigua" like 'R:%'
+			or public.predio.observaciones like 'P: 09115%'
+			)
+)	

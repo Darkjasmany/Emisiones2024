@@ -1,0 +1,40 @@
+--QUERY PARA REVISAR EL VALOR DE ISOPRECIO Y HACERLE UPDATE A LOS PREDIOS QUE ESTAN EN ESE POLIGONO
+
+select "id" from tipo_isoprecios where codigo in (SELECT CONCAT( parroquia.codigo, trim(zona.codigo), trim(sector.codigo), trim(poligono.codigo)) as "Clave Predial(P C P Z S P)" FROM cliente, predio, tipo_personeria_juridica, poligono, sector, zona, parroquia, canton, provincia
+																																																													WHERE predio.id_poligono =   '2618' AND predio.id_cliente = cliente.id AND predio.id_poligono = poligono.id AND poligono.id_sector = sector.id AND sector.id_zona = zona.id AND zona.id_parroquia = parroquia.id AND parroquia.id_canton = canton.id AND canton.id_provincia = provincia.id AND tipo_personeria_juridica.id = predio.id_tipo_personeria_juridica AND predio.estado = 1);
+select * from caracteristicas_lote where "id" in (select "id" from predio where estado = 1 and id_poligono  = '2618') ;
+
+--QUERY PARA VERIFICAR QUE ISOPRECIO NO ESTA DEFINIDO EN EL PREDIO, CONSIDERANDO EL ID POLIGONO
+select "count"("id"),id_poligono from predio where
+"id" in (select "id" from caracteristicas_lote where"id" in (select "id" from predio where estado = 1)  and id_tipo_isoprecios is NULL)
+and estado = 1 GROUP BY id_poligono ORDER BY id_poligono;
+
+--QUERY PARA INDICAR CUALES SON LOS PREDIOS QUE NO TIENEN ISOPRECIO
+select p."id", p.id_poligono , cl.clave, cl.nombres
+from predio p , claveclientevw cl
+where
+p."id" in (select "id" from caracteristicas_lote where"id" in (select "id" from predio where estado = 1)  and id_tipo_isoprecios is NULL)
+and p.estado = 1
+and p."id"= cl.idpredio
+ORDER BY cl.clave
+
+--QUERY PARA SACAR LOS VALORES DE EMISION PARA EL ARCHIVO DE EXCEL
+select cl.clave,c.cedula,cl.nombres,p.calle,p.entre,lqa."areaTerreno" "Area Terreno", lqa."valorTerreno", lqa."areaConstruccion" "Area Construccion", lqa."valorConstruccion",
+(select "valorUnitario" from factura_detalle fd where fd.id_rubro=65 and fd.id_factura=f.id) as "Exoneracion", --65
+(select "valorUnitario" from factura_detalle fd where fd.id_rubro=44 and fd.id_factura=f.id) as "Serv. Adm", --44
+(select "valorUnitario" from factura_detalle fd where fd.id_rubro=66 and fd.id_factura=f.id) as "Imp. Predial", --66
+(select "valorUnitario" from factura_detalle fd where fd.id_rubro=67 and fd.id_factura=f.id) as "Solar No Edif", --67
+(select "valorUnitario" from factura_detalle fd where fd.id_rubro=68 and fd.id_factura=f.id) as "Bomberos", --68
+(select SUM("valorUnitario") from factura_detalle fd where fd.id_factura=f.id) as "Total"
+from predio p, claveclientevw cl, cliente c, liquidacion_avaluo lqa, factura f
+where p.estado = 1
+and p.id = cl.idpredio
+and p.id_cliente = c."id"
+and lqa.id_predio = p."id"
+and lqa.ano = 2022
+and lqa.estado in(1)
+and lqa.id_factura = f."id"
+and f.estado = 1
+ORDER BY cl.clave
+;
+
